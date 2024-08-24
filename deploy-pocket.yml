@@ -1,0 +1,21 @@
+---
+- name: Build and run PocketBase Docker container
+  hosts: all
+  tasks:
+    - name: Build PocketBase Docker image
+      docker_image:
+        name: "pocketbase-{{ pb_version }}"
+        source: build
+        build:
+          path: .
+          args:
+            PB_VERSION: "{{ pb_version }}"
+        state: present
+        force_tag: true
+
+    - name: Run PocketBase Docker container
+      docker_container:
+        name: "{{ instance_code }}"
+        image: "pocketbase-{{ pb_version }}:latest"
+        state: started
+        restart_policy: always

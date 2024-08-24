@@ -1,0 +1,8 @@
+---
+- name: Docker PS
+  hosts: all
+  become: yes
+  tasks:
+    - name: executing docker ps 
+      shell: docker ps
+      register: docker_ps

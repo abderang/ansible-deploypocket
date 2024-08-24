@@ -1,0 +1,33 @@
+---
+- name: Install Caddy Server
+  hosts: all
+  tasks:
+    - name: Create a Docker network
+      docker_network:
+        name: caddy_network
+        driver: bridge
+
+    - name: Pull Caddy image
+      docker_image:
+        name: caddy:latest
+        tag: latest
+        source: pull
+        state: present
+
+    - name: Run Caddy in a Docker container
+      docker_container:
+        name: caddy_server
+        image: caddy:latest
+        state: started
+        restart_policy: always
+        volumes:
+          - "{{ caddy_dir }}/Caddyfile:/etc/caddy/Caddyfile:ro"
+          - "{{ caddy_dir }}/site:/srv"
+          - "{{ caddy_dir }}/data:/data"
+          - "{{ caddy_dir }}/config:/config"
+        ports:
+          - "80:80"
+          - "443:443"
+          - "443:443/udp"
+        networks:
+          - name: caddy_network
