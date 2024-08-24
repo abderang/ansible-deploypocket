@@ -18,7 +18,7 @@
       ansible.builtin.shell: |
         mkdir -p /tmp/caddy/
         cat << EOF > /tmp/caddy/Caddyfile
-        *.deploypocket.com {
+        http://*.deploypocket.com {
           reverse_proxy {labels.2}:8090
         }
         EOF
