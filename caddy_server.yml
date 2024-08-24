@@ -14,6 +14,15 @@
         source: pull
         state: present
 
+    - name: Create directory and add multiline content to file
+      ansible.builtin.shell: |
+        mkdir -p /tmp/caddy/
+        cat << EOF > /tmp/caddy/Caddyfile
+        *.deploypocket.com {
+          reverse_proxy {labels.2}:8090
+        }
+        EOF
+
     - name: Run Caddy in a Docker container
       docker_container:
         name: caddy_server
@@ -21,10 +30,10 @@
         state: started
         restart_policy: always
         volumes:
-          - "{{ caddy_dir }}/Caddyfile:/etc/caddy/Caddyfile:ro"
-          - "{{ caddy_dir }}/site:/srv"
-          - "{{ caddy_dir }}/data:/data"
-          - "{{ caddy_dir }}/config:/config"
+          - "/tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro"
+          - "/tmp/caddy/site:/srv"
+          - "/tmp/caddy/data:/data"
+          - "/tmp/caddy/config:/config"
         ports:
           - "80:80"
           - "443:443"
