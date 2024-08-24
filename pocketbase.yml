@@ -19,3 +19,5 @@
         image: "pocketbase-{{ pb_version }}:latest"
         state: started
         restart_policy: always
+        networks:
+          - name: caddy_network
