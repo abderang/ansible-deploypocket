@@ -1,7 +1,6 @@
 ---
 - name: Docker PS
   hosts: all
-  become: yes
   tasks:
     - name: executing docker ps 
       ansible.builtin.shell: docker ps
