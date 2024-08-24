@@ -1,0 +1,8 @@
+---
+- name: Stop PocketBase Docker container
+  hosts: all
+  tasks:
+    - name: Stop PocketBase Docker container
+      docker_container:
+        name: "{{ instance_code }}"
+        state: stopped
