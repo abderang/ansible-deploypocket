@@ -27,7 +27,7 @@
       
     - name: Build PocketBase Docker image
       docker_image:
-        name: "pocketbase-{{ pb_version }}"
+        name: "pocketbase-1-{{ pb_version }}"
         source: build
         build:
           path: /tmp/pocketbase/
@@ -40,7 +40,7 @@
     - name: Run PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
-        image: "pocketbase-{{ pb_version }}:latest"
+        image: "pocketbase-1-{{ pb_version }}:latest"
         state: started
         restart_policy: always
         env:
