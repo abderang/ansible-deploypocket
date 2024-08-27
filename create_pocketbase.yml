@@ -1,7 +1,6 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
-  connection: local
   tasks:
     - name: Write Dockerfile for PocketBase
       copy:
