@@ -40,7 +40,6 @@
         state: started
         restart_policy: always
         env:
-          ADMIN_EMAIL: "{{ admin_email }}"
-          ADMIN_PASS: "{{ admin_password }}"
+          RUN_CMD: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
         networks:
           - name: caddy_network
