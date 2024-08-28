@@ -43,3 +43,5 @@
           RUN_CMD: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
         networks:
           - name: caddy_network
+        volumes:
+          - "~/pocketbase_apps/{{ instance_code }}/pb":/pb
