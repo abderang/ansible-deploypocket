@@ -50,19 +50,19 @@
       - name: Run migrations
         community.docker.docker_container_exec:
           container: "{{ instance_code }}"
-            argv:
+          argv:
             - /pb/pocketbase
             - "migrate"
             - "up"
-          register: result
+        register: result
 
       - name: Create Admin Account
         community.docker.docker_container_exec:
           container: "{{ instance_code }}"
-            argv:
-            - /pb/pocketbase
-            - "admin"
-            - "create"
-            - "{{ admin_email }}"
-            - "{{ admin_password }}"
-          register: result
+          argv:
+          - /pb/pocketbase
+          - "admin"
+          - "create"
+          - "{{ admin_email }}"
+          - "{{ admin_password }}"
+        register: result
