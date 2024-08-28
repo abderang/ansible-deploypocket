@@ -20,6 +20,11 @@
           ENV RUN_CMD="/pb/pocketbase serve --http=0.0.0.0:8090"
           
           CMD sh -c "$RUN_CMD"
+
+    - name: Ensure the app directory exists
+      file:
+        path: "~/pocketbase_apps/{{ instance_code }}/pb"
+        state: directory
       
     - name: Build PocketBase Docker image
       docker_image:
