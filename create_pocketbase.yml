@@ -37,7 +37,7 @@
       docker_container:
         name: "{{ instance_code }}"
         image: "pocketbase-{{ pb_version }}:latest"
-        command: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
+        command: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve"
         state: started
         restart_policy: always
         networks:
