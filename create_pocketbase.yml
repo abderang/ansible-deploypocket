@@ -44,4 +44,4 @@
         networks:
           - name: caddy_network
         volumes:
-          - "~/pocketbase_apps/{{ instance_code }}/pb":/pb
+          - "~/pocketbase_apps/{{ instance_code }}/pb:/pb"
