@@ -23,7 +23,7 @@
 
     - name: Ensure the app directory exists
       file:
-        path: "~/pocketbase_apps/{{ instance_code }}/pb"
+        path: "/home/abdelhadi/pocketbase_apps/{{ instance_code }}/pb"
         state: directory
       
     - name: Build PocketBase Docker image
@@ -49,4 +49,4 @@
         networks:
           - name: caddy_network
         volumes:
-          - "~/pocketbase_apps/{{ instance_code }}/pb:/pb"
+          - "/home/abdelhadi/pocketbase_apps/{{ instance_code }}/pb:/pb"
