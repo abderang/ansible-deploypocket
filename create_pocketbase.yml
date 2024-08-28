@@ -9,10 +9,7 @@
           FROM alpine:latest
 
           ARG PB_VERSION=0.22.19
-
-          ENV ADMIN_EMAIL=
-          ENV ADMIN_PASS=
-
+          
           RUN apk add --no-cache \
               unzip \
               ca-certificates
@@ -21,9 +18,16 @@
           ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_arm64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
 
-          # start PocketBase
-          CMD ["sh", "-c", "/pb/pocketbase migrate up && /pb/pocketbase admin create $ADMIN_EMAIL $ADMIN_PASS && /pb/pocketbase serve --http=0.0.0.0:8090"]
+          # the default command
+          ENV RUN_CMD="/pb/pocketbase serve --http=0.0.0.0:8090"
 
+          # start PocketBase
+          CMD sh -c "$RUN_CMD"
+
+    - name: Ensure the app directory exists
+      file:
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb"
+        state: directory
       
     - name: Build PocketBase Docker image
       docker_image:
@@ -44,7 +48,9 @@
         state: started
         restart_policy: always
         env:
-          ADMIN_EMAIL: "{{ admin_email }}"
-          ADMIN_PASS: "{{ admin_password }}"
+          RUN_CMD: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
         networks:
           - name: caddy_network
+        volumes:
+          - "{{ pocketbase_apps_dir }}}/{{ instance_code }}/pb/migrations:/pb/migrations"
+          - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data:/pb/pb_data"
