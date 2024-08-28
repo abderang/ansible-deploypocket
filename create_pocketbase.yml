@@ -16,11 +16,6 @@
           ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
 
-          # the default command
-          ENV RUN_CMD="/pb/pocketbase serve --http=0.0.0.0:8090"
-          
-          CMD sh -c "$RUN_CMD"
-
     - name: Ensure the app directory exists
       file:
         path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb"
@@ -42,10 +37,9 @@
       docker_container:
         name: "{{ instance_code }}"
         image: "pocketbase-{{ pb_version }}:latest"
+        command: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
         state: started
         restart_policy: always
-        env:
-          RUN_CMD: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve --http=0.0.0.0:8090"
         networks:
           - name: caddy_network
         volumes:
