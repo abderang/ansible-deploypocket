@@ -54,7 +54,6 @@
           - /pb/pocketbase
           - "migrate"
           - "up"
-      register: result
 
     - name: Create Admin Account
       community.docker.docker_container_exec:
@@ -65,4 +64,3 @@
           - "create"
           - "{{ admin_email }}"
           - "{{ admin_password }}"
-      register: result
