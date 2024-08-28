@@ -43,6 +43,9 @@
         restart_policy: always
         networks:
           - name: caddy_network
+        env:
+          ADMIN_EMAIL: "{{ admin_email }}"
+          ADMIN_PASS: "{{ admin_password }}"
         volumes:
           - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/migrations:/pb/migrations"
           - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data:/pb/pb_data"
