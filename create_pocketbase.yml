@@ -15,6 +15,8 @@
           
           ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
+          
+          CMD ["sh", "-c", "/pb/pocketbase migrate up && /pb/pocketbase admin create $ADMIN_EMAIL $ADMIN_PASS && /pb/pocketbase serve --http=0.0.0.0:8090"]
 
     - name: Ensure the app directory exists
       file:
@@ -37,7 +39,6 @@
       docker_container:
         name: "{{ instance_code }}"
         image: "pocketbase-{{ pb_version }}:latest"
-        command: "/pb/pocketbase migrate up && /pb/pocketbase admin create {{ admin_email }} {{ admin_password }} && /pb/pocketbase serve"
         state: started
         restart_policy: always
         networks:
