@@ -7,3 +7,5 @@
       docker_container:
         name: "{{ instance_code }}"
         state: started
+        networks:
+          - name: caddy_network
