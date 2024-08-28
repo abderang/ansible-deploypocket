@@ -48,7 +48,7 @@
           - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data:/pb/pb_data"
 
     - name: Run migrations
-      docker_container_exec:
+      community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
           - /pb/pocketbase
@@ -57,7 +57,7 @@
       register: result
 
     - name: Create Admin Account
-      docker_container_exec:
+      community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
           - /pb/pocketbase
