@@ -6,7 +6,7 @@
     - name: Start PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
-        command: "/pb/pocketbase serve --http:0.0.0.0:8090"
+        command: ["/pb/pocketbase", "serve", "--http:0.0.0.0:8090"]
         state: started
         networks:
           - name: caddy_network
