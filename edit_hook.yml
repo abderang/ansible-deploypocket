@@ -1,0 +1,8 @@
+---
+- name: Create or update main.pb.js in the volume directory
+  hosts: all
+  tasks:
+    - name: Saving the hook code
+      ansible.builtin.copy:
+        dest: "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks/main.pb.js"
+        content: "{{ content }}"
