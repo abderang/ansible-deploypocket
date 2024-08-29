@@ -6,3 +6,4 @@
       ansible.builtin.copy:
         dest: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
         content: "{{ content }}"
+      become: yes
