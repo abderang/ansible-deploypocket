@@ -4,7 +4,7 @@
   connection: local
   become: true
   tasks:
-     - name: Remove Data
+    - name: Remove Data
       community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
@@ -12,7 +12,7 @@
           - "-r"
           - "/pb/pb_data"
           - "/pb/migrations"
-        
+
     - name: Delete PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
