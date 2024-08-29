@@ -22,5 +22,5 @@
     - name: Remove associated volumes
       become: true
       file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}"
         state: absent
