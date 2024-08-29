@@ -20,8 +20,12 @@
 
     - name: Ensure the app directory exists
       file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb"
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/{{ item }}"
         state: directory
+      with_items:
+        - migrations
+        - pb_data
+        - pb_hooks
       
     - name: Build PocketBase Docker image
       docker_image:
@@ -34,6 +38,11 @@
             PB_VERSION: "{{ pb_version }}"
         state: present
         force_tag: true
+
+    - name: Create Hooks file:
+      file:
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks"
+        state: touch
 
     - name: Run PocketBase Docker container
       docker_container:
