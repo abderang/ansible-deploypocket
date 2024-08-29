@@ -1,5 +1,6 @@
 - name: Create or update main.pb.js in the volume directory
-  hosts: localhost
+  hosts: all
+  connection: local
   tasks:
     - name: Ensure the main.pb.js file exists with the correct content
       ansible.builtin.copy:
