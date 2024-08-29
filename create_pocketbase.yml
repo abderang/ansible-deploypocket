@@ -27,7 +27,7 @@
         - pb_data
         - pb_hooks
       
-    - name: Create Hooks file
+    - name: Create hooks file
       file:
         path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
         state: touch
