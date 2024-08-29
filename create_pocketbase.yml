@@ -41,7 +41,7 @@
 
     - name: Create Hooks file:
       file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks"
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
         state: touch
 
     - name: Run PocketBase Docker container
