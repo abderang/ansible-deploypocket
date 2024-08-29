@@ -1,7 +1,6 @@
 ---
 - name: Start PocketBase Docker container
   hosts: all
-  connection: local
   tasks:
     - name: Start PocketBase Docker container
       docker_container:
@@ -12,3 +11,4 @@
         volumes:
           - "/pocketbase_apps/{{ instance_code }}/pb/migrations:/pb/migrations"
           - "/pocketbase_apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
+          - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
