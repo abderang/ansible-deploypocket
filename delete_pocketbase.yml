@@ -2,7 +2,7 @@
 - name: Delete PocketBase Docker container
   hosts: all
   connection: local
-  become: yes
+  become: true
   tasks:
     - name: Delete PocketBase Docker container
       docker_container:
@@ -11,6 +11,7 @@
         keep_volumes: false
 
     - name: Remove associated volumes
+      become: true
       file:
         path: "{{ item }}"
         state: absent
