@@ -1,1 +1,7 @@
-
+- name: Create or update main.pb.js in the volume directory
+  hosts: localhost
+  tasks:
+    - name: Ensure the main.pb.js file exists with the correct content
+      ansible.builtin.copy:
+        dest: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
+        content: "{{ content }}"
