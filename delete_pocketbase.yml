@@ -11,3 +11,4 @@
     - name : Delete Related Directories 
       file:
         path: "{{ pocketbase_apps_dir }}/{{ instance_code }}"
+        state: absent
