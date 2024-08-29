@@ -2,24 +2,9 @@
 - name: Delete PocketBase Docker container
   hosts: all
   connection: local
-  become: true
   tasks:
-    - name: Remove Data
-      community.docker.docker_container_exec:
-        container: "{{ instance_code }}"
-        argv:
-          - rm
-          - "-r"
-          - "/pb"
-
     - name: Delete PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
         state: absent
         keep_volumes: false
-
-    - name: Remove associated volumes
-      become: true
-      file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}"
-        state: absent
