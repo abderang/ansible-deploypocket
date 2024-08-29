@@ -4,14 +4,18 @@
   connection: local
   become: true
   tasks:
+    - name: Stop PocketBase Docker container
+      docker_container:
+        name: "{{ instance_code }}"
+        state: stopped
+        
     - name: Remove Data
       community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
           - rm
           - "-r"
-          - "/pb/pb_data"
-          - "/pb/migrations"
+          - "/pb"
 
     - name: Delete PocketBase Docker container
       docker_container:
