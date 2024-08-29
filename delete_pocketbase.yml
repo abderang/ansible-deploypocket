@@ -7,3 +7,7 @@
       docker_container:
         name: "{{ instance_code }}"
         state: absent
+        
+    - name : Delete Related Directories 
+      file:
+        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}"
