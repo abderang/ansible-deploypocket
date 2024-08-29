@@ -3,6 +3,6 @@
   connection: local
   tasks:
     - name: Saving the hook code
-      blockinfile:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
-        block: "{{ content }}"
+      ansible.builtin.copy:
+        dest: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
+        content: "{{ content }}"
