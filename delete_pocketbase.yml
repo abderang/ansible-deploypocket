@@ -8,4 +8,12 @@
       docker_container:
         name: "{{ instance_code }}"
         state: absent
-        purge: yes
+        keep_volumes: false
+
+    - name: Remove associated volumes
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/migrations"
+        - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data"
