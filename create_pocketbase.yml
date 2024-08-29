@@ -46,6 +46,7 @@
         volumes:
           - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/migrations:/pb/migrations"
           - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data:/pb/pb_data"
+          - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
 
     - name: Run migrations
       community.docker.docker_container_exec:
