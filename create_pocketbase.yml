@@ -42,7 +42,7 @@
       
     - name: Build PocketBase Docker image
       docker_image:
-        name: "pocketbase-1-{{ pb_version }}"
+        name: "pocketbase-003-{{ pb_version }}"
         source: build
         build:
           path: /tmp/pocketbase/
