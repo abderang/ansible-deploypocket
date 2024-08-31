@@ -1,7 +1,25 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
+  become: yes
+  become_user: root
   tasks:
+    - name: Ensure App Directories Exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "/tmp/pocketbase"
+        - "/pocketbase_apps/{{ instance_code }}/pb/migrations"
+        - "/pocketbase_apps/{{ instance_code }}/pb/pb_data"
+        - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks"
+
+    - name: Create hooks file
+      file:
+        path: "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks/main.pb.js"
+        state: touch
+        
     - name: Write Dockerfile for PocketBase
       copy:
         dest: "/tmp/pocketbase/Dockerfile"
@@ -21,28 +39,9 @@
           # start PocketBase
           CMD ["pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
 
-    - name: Ensure the app directory exists
-      file:
-        path: "/pocketbase_apps/{{ instance_code }}/pb"
-        state: directory
-
-    - name: Ensure the app directory exists
-      file:
-        path: "/pocketbase_apps/{{ instance_code }}/pb/{{ item }}"
-        state: directory
-      with_items:
-      - migrations
-      - pb_data
-      - pb_hooks
-
-    - name: Create hooks file
-      file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
-        state: touch
-      
     - name: Build PocketBase Docker image
       docker_image:
-        name: "pocketbase-003-{{ pb_version }}"
+        name: "pocketbase-{{ pb_version }}"
         source: build
         build:
           path: /tmp/pocketbase/
@@ -55,7 +54,7 @@
     - name: Run PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
-        image: "pocketbase-1-{{ pb_version }}:latest"
+        image: "pocketbase-{{ pb_version }}:latest"
         state: started
         restart_policy: always
         networks:

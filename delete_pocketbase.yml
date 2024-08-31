@@ -1,8 +1,15 @@
 ---
 - name: Delete PocketBase Docker container
   hosts: all
+  become: yes
+  become_user: root
   tasks:
     - name: Delete PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
+        state: absent
+
+    - name: Remove App Directory from Host
+      file:
+        path: "/pocketbase_apps/{{ instance_code }}"
         state: absent
