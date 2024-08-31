@@ -1,11 +1,10 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
-  connection: local
   become: yes
   become_user: root
   tasks:
-    - name: Ensure Directories Exists
+    - name: Ensure App Directories Exist
       file:
         path: "{{ item }}"
         state: directory
