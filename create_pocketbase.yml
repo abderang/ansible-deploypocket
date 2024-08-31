@@ -12,9 +12,6 @@
         mode: '0755'
       loop:
         - "/tmp/pocketbase"
-        - "/pocketbase_apps"
-        - "/pocketbase_apps/{{ instance_code }}"
-        - "/pocketbase_apps/{{ instance_code }}/pb"
         - "/pocketbase_apps/{{ instance_code }}/pb/migrations"
         - "/pocketbase_apps/{{ instance_code }}/pb/pb_data"
         - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks"
