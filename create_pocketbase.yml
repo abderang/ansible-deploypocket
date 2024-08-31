@@ -54,7 +54,7 @@
     - name: Run PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
-        image: "pocketbase-{{ pb_version }}:latest"
+        image: "pocketbase-003-{{ pb_version }}:latest"
         state: started
         restart_policy: always
         networks:
