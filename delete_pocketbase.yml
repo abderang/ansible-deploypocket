@@ -10,7 +10,7 @@
         name: "{{ instance_code }}"
         state: absent
 
-    - name: Remove app dir:
+    - name: Remove app dir
       file:
         path: "/pocketbase_apps/{{ instance_code }}"
         state: absent
