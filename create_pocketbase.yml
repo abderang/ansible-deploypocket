@@ -1,6 +1,7 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
+  connection: local
   tasks:
     - name: Ensure Directories Exists
       file:
