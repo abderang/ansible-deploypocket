@@ -8,6 +8,7 @@
       file:
         path: "{{ item }}"
         state: directory
+        mode: '0755'
       loop:
         - "/tmp/pocketbase"
         - "/pocketbase_apps"
