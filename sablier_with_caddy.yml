@@ -17,17 +17,15 @@
       ansible.builtin.copy:
         content: |
           http://*.deploypocket.com {
-            route {
-              sablier url=http://sablier:10000 {
-                group pocketbase_apps
-                session_duration 1m 
-                dynamic {
-                    display_name Deploypocket
-                }
+            sablier url=http://sablier:10000 {
+              group pocketbase_apps
+              session_duration 1m 
+              dynamic {
+                  display_name Deploypocket
               }
-
-              reverse_proxy {labels.2}:8090
             }
+            
+            reverse_proxy {labels.2}:8090
           }
           
         dest: /tmp/caddy/Caddyfile
@@ -42,8 +40,6 @@
           - '/var/run/docker.sock:/var/run/docker.sock'
         state: started
         restart_policy: always
-        networks:
-          - name: caddy_network
 
     - name: Deploy Caddy Proxy Service
       docker_container:
