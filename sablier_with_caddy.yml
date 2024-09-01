@@ -2,7 +2,6 @@
 - name: Deploy Docker services
   hosts: all
   connection: local
-  become: yes
   tasks:
     - name: Ensure App Directories Exist
       file:
