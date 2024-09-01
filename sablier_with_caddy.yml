@@ -17,15 +17,17 @@
       ansible.builtin.copy:
         content: |
           http://*.deploypocket.com {
-            sablier url=http://sablier:10000 {
-              group pocketbase_apps
-              session_duration 1m 
-              dynamic {
-                  display_name Deploypocket
+            route / {
+              sablier url=http://sablier:10000 {
+                group pocketbase_apps
+                session_duration 1m 
+                dynamic {
+                    display_name Deploypocket
+                }
               }
+              
+              reverse_proxy {labels.2}:8090
             }
-            
-            reverse_proxy {labels.2}:8090
           }
           
         dest: /tmp/caddy/Caddyfile
