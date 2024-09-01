@@ -13,24 +13,13 @@
         - "/tmp/caddy"
         - "/tmp/sablier"
 
-    - name: Clone Sablier repository
-      git:
-        repo: https://github.com/acouvreur/sablier.git
-        version: v1.4.0-beta.3
-        dest: /tmp/sablier
-        update: yes
-
-    - name: Build Caddy plugin image
+    - name: Build Docker image from GitHub repository
       community.docker.docker_image:
-        name: caddy
-        tag: 2.6.4-with-sablier
-        source: build
         build:
-          path: /tmp/sablier
-          dockerfile: plugins/caddy/Dockerfile
-          args:
+          path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
+          buildargs:
             CADDY_VERSION: "2.6.4"
-        force_source: yes
+        name: "caddy:2.6.4-with-sablier"
 
     - name: Create Caddyfile
       ansible.builtin.copy:
