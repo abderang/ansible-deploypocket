@@ -17,8 +17,15 @@
         content: |
           http://*.deploypocket.com {
             route /* {
-              reverse_proxy {labels.2}:8090
+              sablier {
+                group pocketbase_apps
+                session_duration 1m 
+                dynamic {
+                    display_name Deploypocket
+                }
+              }
             }
+            reverse_proxy {labels.2}:8090
           }
           
         dest: /tmp/caddy/Caddyfile
