@@ -18,7 +18,7 @@
         source: build
         build:
           path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
-          buildargs:
+          args:
             CADDY_VERSION: "2.6.4"
         name: "caddy:2.6.4-with-sablier"
 
