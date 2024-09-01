@@ -6,9 +6,31 @@
   tasks:
     - name: Ensure App Directories Exist
       file:
-        path: "/tmp/caddy"
+        path: "{{ item }}"
         state: directory
         mode: '0755'
+      loop:
+        - "/tmp/caddy"
+        - "/tmp/sablier"
+
+    - name: Clone Sablier repository
+      git:
+        repo: https://github.com/acouvreur/sablier.git
+        version: v1.4.0-beta.3
+        dest: /tmp/sablier
+        update: yes
+
+    - name: Build Caddy plugin image
+      community.docker.docker_image:
+        name: caddy
+        tag: 2.6.4-with-sablier
+        source: build
+        build:
+          path: /tmp/sablier
+          dockerfile: plugins/caddy/Dockerfile
+          args:
+            CADDY_VERSION: "2.6.4"
+        force_source: yes
 
     - name: Create Caddyfile
       ansible.builtin.copy:
@@ -27,24 +49,16 @@
         dest: /tmp/caddy/Caddyfile
         mode: '0644'
 
-    - name: Build Caddy plugin image
-      docker_image:
-        name: caddy
-        tag: 2.6.4-with-sablier
-        source: build
-        build:
-          path: https://github.com/acouvreur/sablier.git#v1.4.0-beta.3
-          dockerfile: plugins/caddy/Dockerfile
-          args:
-            CADDY_VERSION: "2.6.4"
-        force_source: yes
-
     - name: Deploy Caddy Proxy Service
       docker_container:
         name: proxy
         image: caddy:2.6.4-with-sablier
         ports:
-          - "8080:80"
+          - "80:80"
+          - "443:443"
+          - "443:443/udp"
+        networks:
+          - name: caddy_network
         volumes:
           - /tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
         state: started
