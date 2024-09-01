@@ -32,7 +32,7 @@
 
     - name: Deploy Caddy Proxy Service
       docker_container:
-        name: proxy
+        name: caddy_server
         image: caddy:2.6.4-with-sablier
         ports:
           - "80:80"
