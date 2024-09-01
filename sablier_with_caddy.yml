@@ -18,7 +18,7 @@
         content: |
           http://*.deploypocket.com {
             route / {
-              sablier url=http://sablier:10000 {
+              sablier {
                 group pocketbase_apps
                 session_duration 1m 
                 dynamic {
