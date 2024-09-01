@@ -1,6 +1,7 @@
 ---
 - name: Create or update main.pb.js in the volume directory
   hosts: all
+  connection: local
   tasks:
     - name: Saving the hook code
       ansible.builtin.copy:
