@@ -16,12 +16,22 @@
       ansible.builtin.copy:
         content: |
           http://*.deploypocket.com {
-            route /* {
+            route /_/* {
               sablier {
                 group pocketbase_apps
                 session_duration 1m 
                 dynamic {
                     display_name Deploypocket
+                }
+              }
+              reverse_proxy {labels.2}:8090
+            }
+            route /api/* {
+              sablier {
+                group pocketbase_apps
+                session_duration 1m 
+                blocking {
+                    default-timeout: 1m
                 }
               }
               reverse_proxy {labels.2}:8090
