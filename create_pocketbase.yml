@@ -64,8 +64,8 @@
           - "/pocketbase_apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
           - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
         labels:
-          "sablier.enable": true
-          "sablier.group": pocketbase_apps
+          "sablier.enable": "true"
+          "sablier.group": "pocketbase_apps"
 
     - name: Run Pocketbase Migrations
       community.docker.docker_container_exec:
