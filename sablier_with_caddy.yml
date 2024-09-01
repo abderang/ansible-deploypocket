@@ -4,6 +4,12 @@
   connection: local
   become: yes
   tasks:
+    - name: Ensure App Directories Exist
+      file:
+        path: "/tmp/caddy"
+        state: directory
+        mode: '0755'
+
     - name: Create Caddyfile
       ansible.builtin.copy:
         content: |
