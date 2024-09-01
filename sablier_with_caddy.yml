@@ -24,8 +24,8 @@
                     display_name Deploypocket
                 }
               }
+              reverse_proxy {labels.2}:8090
             }
-            reverse_proxy {labels.2}:8090
           }
           
         dest: /tmp/caddy/Caddyfile
