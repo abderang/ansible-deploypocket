@@ -2,7 +2,25 @@
 - name: Build and run PocketBase Docker container
   hosts: all
   connection: local
+  become: yes
+  become_user: root
   tasks:
+    - name: Ensure App Directories Exist
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - "/tmp/pocketbase"
+        - "/pocketbase_apps/{{ instance_code }}/pb/migrations"
+        - "/pocketbase_apps/{{ instance_code }}/pb/pb_data"
+        - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks"
+
+    - name: Create hooks file
+      file:
+        path: "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks/main.pb.js"
+        state: touch
+        
     - name: Write Dockerfile for PocketBase
       copy:
         dest: "/tmp/pocketbase/Dockerfile"
@@ -14,27 +32,17 @@
           RUN apk add --no-cache unzip ca-certificates
           
           ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+
           RUN unzip /tmp/pb.zip -d /pb/
           
           CMD ["pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
 
-    - name: Ensure the app directory exists
-      file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/{{ item }}"
-        state: directory
-      with_items:
-        - migrations
-        - pb_data
-        - pb_hooks
-      
-    - name: Create hooks file
-      file:
-        path: "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks/main.pb.js"
-        state: touch
-   
+          # start PocketBase
+          CMD ["pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
+
     - name: Build PocketBase Docker image
       docker_image:
-        name: "pocketbase-{{ pb_version }}"
+        name: "pocketbase-003-{{ pb_version }}"
         source: build
         build:
           path: /tmp/pocketbase/
@@ -48,17 +56,17 @@
     - name: Run PocketBase Docker container
       docker_container:
         name: "{{ instance_code }}"
-        image: "pocketbase-{{ pb_version }}:latest"
+        image: "pocketbase-003-{{ pb_version }}:latest"
         state: started
         restart_policy: always
         networks:
           - name: caddy_network
         volumes:
-          - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/migrations:/pb/migrations"
-          - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_data:/pb/pb_data"
-          - "{{ pocketbase_apps_dir }}/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
+          - "/pocketbase_apps/{{ instance_code }}/pb/migrations:/pb/migrations"
+          - "/pocketbase_apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
+          - "/pocketbase_apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
 
-    - name: Run migrations
+    - name: Run Pocketbase Migrations
       community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
