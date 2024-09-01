@@ -15,6 +15,7 @@
 
     - name: Build Docker image from GitHub repository
       community.docker.docker_image:
+        source: build
         build:
           path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
           buildargs:
