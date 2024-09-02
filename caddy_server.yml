@@ -3,6 +3,12 @@
   hosts: all
   connection: local
   tasks:
+    - name: Ensure caddy_network exists
+      docker_network:
+        name: caddy_network
+        driver: bridge
+        state: present
+
     - name: Ensure App Directories Exist
       file:
         path: "/tmp/caddy"
