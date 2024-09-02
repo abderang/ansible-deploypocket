@@ -28,9 +28,7 @@
               sablier {
                 group pocketbase_apps
                 session_duration 1m 
-                dynamic {
-                    display_name Deploypocket
-                }
+                blocking
               }
               reverse_proxy {labels.2}:8090
             }
