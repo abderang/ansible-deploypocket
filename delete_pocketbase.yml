@@ -8,6 +8,7 @@
       docker_container:
         name: "{{ instance_code }}"
         state: absent
+        keep_volumes: false
 
     - name: Remove App Directory from Host
       file:

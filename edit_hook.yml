@@ -1,5 +1,5 @@
 ---
-- name: Create or update main.pb.js in the volume directory
+- name: Update main.pb.js in the volume directory
   hosts: all
   become: yes
   become_user: root
