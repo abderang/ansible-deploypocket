@@ -3,33 +3,16 @@
   hosts: all
   connection: local
   tasks:
+    - name: Create a Docker network
+      docker_network:
+        name: caddy_network
+        driver: bridge
+
     - name: Ensure App Directories Exist
       file:
-        path: "{{ item }}"
+        path: "/tmp/sablier"
         state: directory
-        mode: '0775'
-      loop:
-        - "/tmp/caddy"
-        - "/tmp/sablier"
-
-    - name: Create Caddyfile
-      ansible.builtin.copy:
-        content: |
-          http://*.deploypocket.com {
-            route /* {
-              sablier {
-                group pocketbase_apps
-                session_duration 1m 
-                dynamic {
-                    display_name Deploypocket
-                }
-              }
-              reverse_proxy {labels.2}:8090
-            }
-          }
-          
-        dest: /tmp/caddy/Caddyfile
-        mode: '0644'
+        mode: '0755'
 
     - name: Deploy Sablier Service
       docker_container:
@@ -42,18 +25,3 @@
         restart_policy: always
         networks:
           - name: caddy_network
-
-    - name: Deploy Caddy Proxy Service
-      docker_container:
-        name: caddy_server
-        image: caddy:2.6.4-with-sablier
-        ports:
-          - "80:80"
-          - "443:443"
-          - "443:443/udp"
-        networks:
-          - name: caddy_network
-        volumes:
-          - /tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-        state: started
-        restart_policy: always

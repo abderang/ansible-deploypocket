@@ -8,36 +8,47 @@
         name: caddy_network
         driver: bridge
 
-    - name: Pull Caddy image
-      docker_image:
-        name: caddy:latest
-        tag: latest
-        source: pull
-        state: present
+    - name: Ensure App Directories Exist
+      file:
+        path: "/tmp/caddy"
+        state: directory
+        mode: '0755'
 
-    - name: Create directory and add multiline content to file
-      ansible.builtin.shell: |
-        mkdir -p /tmp/caddy/
-        cat << EOF > /tmp/caddy/Caddyfile
-        http://*.deploypocket.com {
-          reverse_proxy {labels.2}:8090
-        }
-        EOF
+    - name: Pull Caddy with suablier image
+      command: "docker build https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy 
+        --build-arg=CADDY_VERSION=2.6.4
+        -t caddy:2.6.4-with-sablier"
 
-    - name: Run Caddy in a Docker container
+    - name: Create Caddyfile
+      ansible.builtin.copy:
+        content: |
+          http://*.deploypocket.com {
+            route /* {
+              sablier {
+                group pocketbase_apps
+                session_duration 1m 
+                dynamic {
+                    display_name Deploypocket
+                }
+              }
+              reverse_proxy {labels.2}:8090
+            }
+          }
+          
+        dest: /tmp/caddy/Caddyfile
+        mode: '0644'
+
+    - name: Deploy Caddy Proxy Service
       docker_container:
         name: caddy_server
-        image: caddy:latest
-        state: started
-        restart_policy: always
-        volumes:
-          - "/tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro"
-          - "/tmp/caddy/site:/srv"
-          - "/tmp/caddy/data:/data"
-          - "/tmp/caddy/config:/config"
+        image: caddy:2.6.4-with-sablier
         ports:
           - "80:80"
           - "443:443"
           - "443:443/udp"
         networks:
           - name: caddy_network
+        volumes:
+          - /tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+        state: started
+        restart_policy: always
