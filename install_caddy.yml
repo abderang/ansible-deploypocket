@@ -1,7 +1,6 @@
 ---
 - name: Install Caddy Server
   hosts: all
-  connection: local
   tasks:
     - name: Ensure caddy_network exists
       docker_network:
@@ -15,7 +14,7 @@
         state: directory
         mode: '0755'
 
-    - name: Pull Caddy with suablier image
+    - name: Pull Caddy with sablier plugin image
       command: "docker build https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy 
         --build-arg=CADDY_VERSION=2.6.4
         -t caddy:2.6.4-with-sablier"
