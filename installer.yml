@@ -1,5 +1,7 @@
 ---
-- name: Install Caddy Server
+- name: Install Dependencoes
   hosts: all
   connection: local
-  import_playbook: "install_sablier.yml"
+  tasks:
+    - name: Install Sablier
+      ansible.builtin.include_tasks: "install_sablier.yml"
