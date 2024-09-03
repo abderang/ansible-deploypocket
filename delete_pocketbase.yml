@@ -1,6 +1,7 @@
 ---
 - name: Delete PocketBase Docker container
   hosts: all
+  connection: local
   tasks:
     - name: Delete PocketBase Docker container
       docker_container:

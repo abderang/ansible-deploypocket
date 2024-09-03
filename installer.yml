@@ -1,6 +1,7 @@
 ---
 - name: Install Dependencoes
   hosts: all
+  connection: local
   tasks:
     - name: Create deploypocket directory
       become: yes
