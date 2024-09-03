@@ -2,6 +2,4 @@
 - name: Install Caddy Server
   hosts: all
   connection: local
-  tasks:
-    - name: Install Sablier
-      import_playbook: "install_sablier.yml"
+  import_playbook: "install_sablier.yml"
