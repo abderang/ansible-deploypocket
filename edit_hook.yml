@@ -1,6 +1,7 @@
 ---
 - name: Update main.pb.js in the volume directory
   hosts: all
+  connection: local
   become: yes
   become_user: root
   tasks:
