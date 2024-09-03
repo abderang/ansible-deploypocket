@@ -15,7 +15,7 @@
       file:
         path: "/deploypocket/{{ item }}"
         state: directory
-        mode: "0777"
+        mode: "0755"
       loop:
         - "caddy"
         - "sablier"
