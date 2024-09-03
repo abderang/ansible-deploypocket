@@ -1,5 +1,6 @@
 ---
 - name: Install Sablier
+  hosts: all
   connection: local
   tasks:
     - name: Ensure caddy_network exists

@@ -4,4 +4,4 @@
   connection: local
   tasks:
     - name: Install Sablier
-      import_tasks: "install_sablier.yml"
+      import_playbook: "install_sablier.yml"
