@@ -4,4 +4,4 @@
   connection: local
   tasks:
     - name: Install Sablier
-      ansible.builtin.import_tasks: "install_sablier.yml"
+      import_tasks: "install_sablier.yml"
