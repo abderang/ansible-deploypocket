@@ -26,7 +26,7 @@
           http://*.deploypocket.com {
             route /* {
               sablier {
-                group pocketbase_apps
+                names {labels.2}
                 session_duration 1m 
                 blocking
               }
