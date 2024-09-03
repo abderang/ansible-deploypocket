@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Deploy Docker services
+  hosts: all
   tasks:
     - name: Ensure caddy_network exists
       docker_network:
