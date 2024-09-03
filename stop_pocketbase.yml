@@ -1,7 +1,6 @@
 ---
 - name: Stop PocketBase Docker container
   hosts: all
-  connection: local
   tasks:
     - name: Stop PocketBase Docker container
       docker_container:
