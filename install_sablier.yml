@@ -1,6 +1,4 @@
 - name: Testing
-  hosts: all
-  connection: local
   tasks:
     - name: Ensure caddy_network exists
       docker_network:
