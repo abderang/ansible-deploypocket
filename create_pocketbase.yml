@@ -1,7 +1,6 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
-  connection: local
   tasks:
     - name: Ensure App Directories Exist
       file:
@@ -31,7 +30,7 @@
               unzip \
               ca-certificates
           # download and unzip PocketBase
-          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_arm64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
           # start PocketBase
           CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
@@ -62,8 +61,6 @@
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
           - "/deploypocket/apps/{{ instance_code }}/pb/storage:/pb/storage"
-        labels:
-          "sablier.enable": "true"
 
     - name: Run Pocketbase Migrations
       community.docker.docker_container_exec:
