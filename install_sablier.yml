@@ -1,16 +1,4 @@
 ---
-- name: Ensure caddy_network exists
-  docker_network:
-    name: caddy_network
-    driver: bridge
-    state: present
-
-- name: Ensure App Directories Exist
-  file:
-    path: "/tmp/sablier"
-    state: directory
-    mode: '0755'
-
 - name: Deploy Sablier Service
   docker_container:
     name: sablier
