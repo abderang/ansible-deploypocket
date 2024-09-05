@@ -8,6 +8,9 @@
   ansible.builtin.copy:
     content: |
       http://*.deploypocket.com {
+        sablier {
+          blocking
+        }
         reverse_proxy {labels.2}:8090
       }
       
