@@ -8,11 +8,13 @@
   ansible.builtin.copy:
     content: |
       http://*.deploypocket.com {
-        sablier {
-          group demp
-          blocking
+        route /* {
+          sablier {
+            group demo
+            blocking
+          }
+          reverse_proxy {labels.2}:8090
         }
-        reverse_proxy {labels.2}:8090
       }
       
     dest: /deploypocket/caddy/Caddyfile
