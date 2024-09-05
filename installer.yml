@@ -17,7 +17,6 @@
         mode: "0755"
       loop:
         - "caddy"
-        - "sablier"
         - "apps"
         - "pocketbase"
 
@@ -26,9 +25,6 @@
         name: caddy_network
         driver: bridge
         state: present
-
-    - name: Install Sablier
-      include_tasks: "install_sablier.yml"
 
     - name: Install Caddy
       include_tasks: "install_caddy.yml"
