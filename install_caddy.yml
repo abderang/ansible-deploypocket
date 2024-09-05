@@ -9,6 +9,7 @@
     content: |
       http://*.deploypocket.com {
         sablier {
+          group * 
           blocking
         }
         reverse_proxy {labels.2}:8090
