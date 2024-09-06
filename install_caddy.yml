@@ -1,52 +1,30 @@
 ---
-- name: Install Caddy Server
-  hosts: all
-  tasks:
-    - name: Ensure caddy_network exists
-      docker_network:
-        name: caddy_network
-        driver: bridge
-        state: present
+- name: Pull Caddy with sablier plugin image
+  command: "docker build https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy 
+    --build-arg=CADDY_VERSION=2.6.4
+    -t caddy:2.6.4-with-sablier"
 
-    - name: Ensure App Directories Exist
-      file:
-        path: "/tmp/caddy"
-        state: directory
-        mode: '0755'
+- name: Create Caddyfile
+  ansible.builtin.copy:
+    content: |
+      http://*.deploypocket.com {
+        reverse_proxy {labels.2}:8090
+      }
+      
+    dest: /deploypocket/caddy/Caddyfile
+    mode: '0644'
 
-    - name: Pull Caddy with sablier plugin image
-      command: "docker build https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy 
-        --build-arg=CADDY_VERSION=2.6.4
-        -t caddy:2.6.4-with-sablier"
-
-    - name: Create Caddyfile
-      ansible.builtin.copy:
-        content: |
-          http://*.deploypocket.com {
-            route /* {
-              sablier {
-                group pocketbase_apps
-                session_duration 1m 
-                blocking
-              }
-              reverse_proxy {labels.2}:8090
-            }
-          }
-          
-        dest: /tmp/caddy/Caddyfile
-        mode: '0644'
-
-    - name: Deploy Caddy Proxy Service
-      docker_container:
-        name: caddy_server
-        image: caddy:2.6.4-with-sablier
-        ports:
-          - "80:80"
-          - "443:443"
-          - "443:443/udp"
-        networks:
-          - name: caddy_network
-        volumes:
-          - /tmp/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
-        state: started
-        restart_policy: always
+- name: Deploy Caddy Proxy Service
+  docker_container:
+    name: caddy_server
+    image: caddy:2.6.4-with-sablier
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    networks:
+      - name: caddy_network
+    volumes:
+      - /deploypocket/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    state: started
+    restart_policy: always

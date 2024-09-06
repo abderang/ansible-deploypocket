@@ -1,27 +1,12 @@
 ---
-- name: Deploy Docker services
-  hosts: all
-  tasks:
-    - name: Ensure caddy_network exists
-      docker_network:
-        name: caddy_network
-        driver: bridge
-        state: present
-
-    - name: Ensure App Directories Exist
-      file:
-        path: "/tmp/sablier"
-        state: directory
-        mode: '0755'
-
-    - name: Deploy Sablier Service
-      docker_container:
-        name: sablier
-        image: acouvreur/sablier:1.7.0
-        command: ["start", "--provider.name=docker"]
-        volumes:
-          - '/var/run/docker.sock:/var/run/docker.sock'
-        state: started
-        restart_policy: always
-        networks:
-          - name: caddy_network
+- name: Deploy Sablier Service
+  docker_container:
+    name: sablier
+    image: acouvreur/sablier:1.7.0
+    command: ["start", "--provider.name=docker"]
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    state: started
+    restart_policy: always
+    networks:
+      - name: caddy_network
