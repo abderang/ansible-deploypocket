@@ -13,6 +13,7 @@
           servers {
               metrics
           }
+          admin :2019
       }
       
       http://*.deploypocket.com {
