@@ -65,6 +65,7 @@
           - "/deploypocket/apps/{{ instance_code }}/pb/storage:/pb/storage"
         labels:
           "sablier.enable": "true"
+          "sablier.group": "{{ instance_code }}"
 
     - name: Run Pocketbase Migrations
       community.docker.docker_container_exec:
