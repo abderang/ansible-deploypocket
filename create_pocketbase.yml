@@ -14,6 +14,7 @@
         - "/deploypocket/apps/{{ instance_code }}/pb/pb_data"
         - "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks"
         - "/deploypocket/apps/{{ instance_code }}/pb/storage"
+        - "/deploypocket/apps/{{ instance_code }}/caddy+sablier.conf"
 
     - name: Create hooks file
       file:
@@ -82,3 +83,19 @@
           - "create"
           - "{{ admin_email }}"
           - "{{ admin_password }}"
+
+    - name: Add caddy and sablier config
+      ansible.builtin.copy:
+        content: |
+          http://{{ instance_code }}.deploypocket.com {
+            route /* {
+              sablier {
+                group {{ instance_code }}
+                blocking
+              }
+              reverse_proxy {{ instance_code }}:8089
+            }
+          }
+          
+        dest: /deploypocket/apps/{{ instance_code }}/caddy+sablier.conf
+        mode: '0644'

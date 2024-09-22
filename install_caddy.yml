@@ -7,14 +7,8 @@
 - name: Create Caddyfile
   ansible.builtin.copy:
     content: |
-      http://*.deploypocket.com {
-        route /* {
-          sablier {
-            group demo
-            blocking
-          }
-          reverse_proxy {labels.2}:8090
-        }
+      {
+        import /deploypocket/apps/*/caddy+sablier.conf
       }
       
     dest: /deploypocket/caddy/Caddyfile
