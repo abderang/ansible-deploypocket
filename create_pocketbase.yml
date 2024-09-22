@@ -14,7 +14,6 @@
         - "/deploypocket/apps/{{ instance_code }}/pb/pb_data"
         - "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks"
         - "/deploypocket/apps/{{ instance_code }}/pb/storage"
-        - "/deploypocket/apps/{{ instance_code }}/caddy+sablier.conf"
 
     - name: Create hooks file
       file:
