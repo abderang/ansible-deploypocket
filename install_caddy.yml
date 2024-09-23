@@ -7,9 +7,6 @@
 - name: Create Caddyfile
   ansible.builtin.copy:
     content: |
-      {
-        admin 0.0.0.0:2019
-      }
       import /deploypocket/apps/*/caddy+sablier.conf
       
     dest: /deploypocket/caddy/Caddyfile
