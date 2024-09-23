@@ -9,8 +9,8 @@
     content: |
       {
         admin 0.0.0.0:2019
-        import /deploypocket/apps/*/caddy+sablier.conf
       }
+      import /deploypocket/apps/*/caddy+sablier.conf
       
     dest: /deploypocket/caddy/Caddyfile
     mode: '0644'
