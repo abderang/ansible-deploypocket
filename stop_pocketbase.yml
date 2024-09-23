@@ -7,3 +7,6 @@
       docker_container:
         name: "{{ instance_code }}"
         state: stopped
+
+    - name: Reload caddy configuration
+      include_tasks: "reload_caddy_configuration.yml"

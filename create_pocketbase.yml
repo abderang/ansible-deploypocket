@@ -101,7 +101,4 @@
         mode: '0644'
 
     - name: Reload caddy configuration
-      community.docker.docker_container_exec:
-        container: caddy_server
-        command: caddy reload
-        chdir: /etc/caddy
+      include_tasks: "reload_caddy_configuration.yml"

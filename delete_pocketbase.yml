@@ -13,3 +13,6 @@
       file:
         path: "/deploypocket/apps/{{ instance_code }}"
         state: absent
+
+    - name: Reload caddy configuration
+      include_tasks: "reload_caddy_configuration.yml"
