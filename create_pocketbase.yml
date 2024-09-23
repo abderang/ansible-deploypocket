@@ -93,7 +93,7 @@
                 group {{ instance_code }}
                 blocking
               }
-              reverse_proxy {{ instance_code }}:8089
+              reverse_proxy {{ instance_code }}:8090
             }
           }
           
