@@ -1,15 +1,14 @@
 ---
-- name: Delete PocketBase Docker container
+- name: Delete pocketBase docker container
   hosts: all
-  connection: local
   tasks:
-    - name: Delete PocketBase Docker container
+    - name: Delete pocketBase docker container
       docker_container:
         name: "{{ instance_code }}"
         state: absent
         keep_volumes: false
 
-    - name: Remove App Directory from Host
+    - name: Remove app directory from host
       file:
         path: "/deploypocket/apps/{{ instance_code }}"
         state: absent
