@@ -62,7 +62,8 @@
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
           - "/deploypocket/apps/{{ instance_code }}/pb/storage:/pb/storage"
-        
+        labels:
+          "sablier.enable": "true"        
 
     - name: Run Pocketbase Migrations
       community.docker.docker_container_exec:
@@ -87,6 +88,10 @@
         content: |
           http://{{ instance_code }}.deploypocket.com {
             route /* {
+              sablier {
+                names {{ instance_code }}
+                dynamic
+              }
               reverse_proxy {{ instance_code }}:8090
             }
           }
