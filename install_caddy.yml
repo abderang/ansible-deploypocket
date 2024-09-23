@@ -27,5 +27,6 @@
       - name: caddy_network
     volumes:
       - /deploypocket/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /deploypocket/apps:/deploypocket/apps:ro
     state: started
     restart_policy: always
