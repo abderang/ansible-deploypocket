@@ -90,7 +90,8 @@
             route /* {
               sablier {
                 names {{ instance_code }}
-                dynamic
+                session_duration 1m
+                blocking
               }
               reverse_proxy {{ instance_code }}:8090
             }
