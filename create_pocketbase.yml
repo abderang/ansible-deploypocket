@@ -93,3 +93,9 @@
           
         dest: /deploypocket/apps/{{ instance_code }}/caddy+sablier.conf
         mode: '0644'
+
+    - name: Reload caddy configuration
+      community.docker.docker_container_exec:
+        container: caddy_server
+        command: caddy reload
+        workdir: /etc/caddy
