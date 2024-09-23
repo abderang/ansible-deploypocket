@@ -98,4 +98,4 @@
       community.docker.docker_container_exec:
         container: caddy_server
         command: caddy reload
-        workdir: /etc/caddy
+        chdir: /etc/caddy
