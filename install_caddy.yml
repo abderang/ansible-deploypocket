@@ -1,12 +1,32 @@
 ---
-- name: Pull Caddy image
+- name: Write Dockerfile for Caddy
+  copy:
+    dest: "/deploypocket/caddy/Dockerfile"
+    content: |
+      ARG CADDY_VERSION=2.6.4
+      FROM caddy:${CADDY_VERSION}-builder AS builder
+
+      ADD https://github.com/acouvreur/sablier.git#v1.4.0-beta.3 /sablier
+
+      RUN xcaddy build \
+          --with github.com/acouvreur/sablier/plugins/caddy=/sablier/plugins/caddy
+
+      FROM caddy:${CADDY_VERSION}
+
+      COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+
+- name: Build PocketBase Docker image
   docker_image:
+    name: caddy
+    tag: 2.6.4-with-sablier
+    source: build
     build:
-      path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
+      path: /deploypocket/caddy/
+      dockerfile: /deploypocket/caddy/Dockerfile
       args:
-        CADDY_VERSION: "2.6.4"
-    name: "caddy"
-    tag: "2.6.4-with-sablier"
+        CADDY_VERSION: 2.6.4
+    state: present
+    force_tag: true
     
 - name: Create Caddyfile
   ansible.builtin.copy:
