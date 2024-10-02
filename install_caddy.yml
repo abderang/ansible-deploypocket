@@ -1,13 +1,12 @@
 ---
 - name: Pull Caddy image
-  - name: Build Docker image
-    community.docker.docker_image:
-      build:
-        path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
-        args:
-          CADDY_VERSION: "2.6.4"
-      name: "caddy"
-      tag: "2.6.4-with-sablier"
+  docker_image:
+    build:
+      path: "https://github.com/acouvreur/sablier.git#v1.4.0-beta.3:plugins/caddy"
+      args:
+        CADDY_VERSION: "2.6.4"
+    name: "caddy"
+    tag: "2.6.4-with-sablier"
     
 - name: Create Caddyfile
   ansible.builtin.copy:
