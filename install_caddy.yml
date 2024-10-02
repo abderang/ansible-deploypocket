@@ -3,13 +3,13 @@
   copy:
     dest: "/deploypocket/caddy/Dockerfile"
     content: |
-      ARG CADDY_VERSION=2.8.4
+      ARG CADDY_VERSION=2.6.4
       FROM caddy:${CADDY_VERSION}-builder AS builder
 
-      COPY . .
+      ADD https://github.com/acouvreur/sablier.git#v1.4.0-beta.3 /sablier
 
       RUN xcaddy build \
-          --with github.com/acouvreur/sablier/plugins/caddy=.
+          --with github.com/acouvreur/sablier/plugins/caddy=/sablier/plugins/caddy
 
       FROM caddy:${CADDY_VERSION}
 
@@ -18,13 +18,13 @@
 - name: Build caddy image
   docker_image:
     name: caddy
-    tag: 2.8.4-with-sablier
+    tag: 2.6.4-with-sablier
     source: build
     build:
       path: /deploypocket/caddy/
       dockerfile: /deploypocket/caddy/Dockerfile
       args:
-        CADDY_VERSION: 2.8.4
+        CADDY_VERSION: 2.6.4
     state: present
     force_tag: true
     
@@ -45,7 +45,7 @@
 - name: Deploy caddy proxy service
   docker_container:
     name: caddy_server
-    image: caddy:2.8.4-with-sablier
+    image: caddy:2.6.4-with-sablier
     ports:
       - "80:80"
       - "443:443"
