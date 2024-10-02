@@ -1,7 +1,8 @@
 ---
 - name: Pull Caddy image
   docker_image:
-    name: caddy:2.6.4-with-sablier
+    name: caddy
+    tag: 2.6.4-with-sablier
     source: pull
     state: present
     
