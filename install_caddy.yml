@@ -1,32 +1,19 @@
 ---
-- name: Write dockerfile for caddy
-  copy:
-    dest: "/deploypocket/caddy/Dockerfile"
-    content: |
-      ARG CADDY_VERSION=2.6.4
-      FROM caddy:${CADDY_VERSION}-builder AS builder
+- name: Clone the sablier repository
+  git:
+    repo: "https://github.com/acouvreur/sablier.git"
+    version: "v1.4.0-beta.3"
+    dest: "/tmp/sablier"
 
-      ADD https://github.com/acouvreur/sablier.git#v1.4.0-beta.3 /sablier
-
-      RUN xcaddy build \
-          --with github.com/acouvreur/sablier/plugins/caddy=/sablier/plugins/caddy
-
-      FROM caddy:${CADDY_VERSION}
-
-      COPY --from=builder /usr/bin/caddy /usr/bin/caddy
-
-- name: Build caddy image
-  docker_image:
-    name: caddy
-    tag: 2.6.4-with-sablier
+- name: Build Docker image
+  community.docker.docker_image:
     source: build
     build:
-      path: /deploypocket/caddy/
-      dockerfile: /deploypocket/caddy/Dockerfile
+      path: "/tmp/sablier/plugins/caddy"
       args:
-        CADDY_VERSION: 2.6.4
-    state: present
-    force_tag: true
+        CADDY_VERSION: "2.6.4"
+    name: "caddy"
+    tag: "2.6.4-with-sablier"
     
 - name: Create Caddyfile
   ansible.builtin.copy:
