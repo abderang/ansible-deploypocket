@@ -1,6 +1,7 @@
 ---
 - name: Build and run PocketBase Docker container
   hosts: all
+  connection: local
   tasks:
     - name: Ensure App Directories Exist
       file:
@@ -30,7 +31,7 @@
               unzip \
               ca-certificates
           # download and unzip PocketBase
-          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_arm64.zip /tmp/pb.zip
+          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
           # start PocketBase
           CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
@@ -54,6 +55,8 @@
         image: "pocketbase-003-{{ pb_version }}:latest"
         state: started
         restart_policy: always
+        cpus: "{{ v_cpu }}"
+        memory: "{{ v_ram }}M"
         networks:
           - name: caddy_network
         volumes:
