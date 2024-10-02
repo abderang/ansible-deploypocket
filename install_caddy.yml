@@ -1,5 +1,5 @@
 ---
-- name: Write Dockerfile for Caddy
+- name: Write dockerfile for caddy
   copy:
     dest: "/deploypocket/caddy/Dockerfile"
     content: |
@@ -15,7 +15,7 @@
 
       COPY --from=builder /usr/bin/caddy /usr/bin/caddy
 
-- name: Build PocketBase Docker image
+- name: Build caddy image
   docker_image:
     name: caddy
     tag: 2.6.4-with-sablier
@@ -42,7 +42,7 @@
     dest: /deploypocket/caddy/Caddyfile
     mode: '0644'
 
-- name: Deploy Caddy Proxy Service
+- name: Deploy caddy proxy service
   docker_container:
     name: caddy_server
     image: caddy:2.6.4-with-sablier

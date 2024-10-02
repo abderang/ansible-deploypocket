@@ -1,5 +1,5 @@
 ---
-- name: Start pocketBase docker container
+- name: Start pocketbase docker container
   hosts: all
   connection: local
   tasks:

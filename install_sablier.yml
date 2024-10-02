@@ -1,5 +1,5 @@
 ---
-- name: Deploy Sablier Service
+- name: Deploy sablier service
   docker_container:
     name: sablier
     image: acouvreur/sablier:1.7.0

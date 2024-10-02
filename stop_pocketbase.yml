@@ -1,9 +1,9 @@
 ---
-- name: Stop PocketBase Docker container
+- name: Stop pocketBase docker container
   hosts: all
   connection: local
   tasks:
-    - name: Stop PocketBase Docker container
+    - name: Stop pocketBase docker container
       docker_container:
         name: "{{ instance_code }}"
         state: stopped

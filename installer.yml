@@ -1,5 +1,5 @@
 ---
-- name: Install Dependencoes
+- name: Install Dependencies
   hosts: all
   connection: local
   tasks:
@@ -28,8 +28,8 @@
         driver: bridge
         state: present
 
-    - name: Install Sablier
+    - name: Install sablier
       include_tasks: "install_sablier.yml"
 
-    - name: Install Caddy
+    - name: Install caddy
       include_tasks: "install_caddy.yml"
