@@ -1,8 +1,7 @@
 ---
 - name: Pull Caddy image
   docker_image:
-    name: caddy:latest
-    tag: latest
+    name: caddy:2.6.4-with-sablier
     source: pull
     state: present
     
@@ -23,7 +22,7 @@
 - name: Deploy Caddy Proxy Service
   docker_container:
     name: caddy_server
-    image: caddy
+    image: caddy:2.6.4-with-sablier
     ports:
       - "80:80"
       - "443:443"
