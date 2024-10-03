@@ -1,8 +1,11 @@
 ---
-- name: Stop PocketBase Docker container
+- name: Stop pocketBase docker container
   hosts: all
   tasks:
-    - name: Stop PocketBase Docker container
+    - name: Stop pocketBase docker container
       docker_container:
         name: "{{ instance_code }}"
         state: stopped
+
+    - name: Reload caddy configuration
+      include_tasks: "reload_caddy_configuration.yml"

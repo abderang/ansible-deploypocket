@@ -1,10 +1,19 @@
 ---
-- name: Pull Caddy image
-  docker_image:
-    name: caddy:latest
-    tag: latest
-    source: pull
-    state: present
+- name: Clone the sablier repository
+  git:
+    repo: "https://github.com/acouvreur/sablier.git"
+    version: "v1.4.0-beta.3"
+    dest: "/tmp/sablier"
+
+- name: Build docker image
+  community.docker.docker_image:
+    source: build
+    build:
+      path: "/tmp/sablier/plugins/caddy"
+      args:
+        CADDY_VERSION: "2.6.4"
+    name: "caddy"
+    tag: "2.6.4-with-sablier"
     
 - name: Create Caddyfile
   ansible.builtin.copy:
@@ -16,17 +25,14 @@
           admin :2019
       }
       
-      http://*.deploypocket.com {
-        reverse_proxy {labels.2}:8090
-      }
-
+      import /deploypocket/apps/*/caddy+sablier.conf
     dest: /deploypocket/caddy/Caddyfile
     mode: '0644'
 
-- name: Deploy Caddy Proxy Service
+- name: Deploy caddy proxy service
   docker_container:
     name: caddy_server
-    image: caddy
+    image: caddy:2.6.4-with-sablier
     ports:
       - "80:80"
       - "443:443"
@@ -36,5 +42,6 @@
       - name: caddy_network
     volumes:
       - /deploypocket/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - /deploypocket/apps:/deploypocket/apps:ro
     state: started
     restart_policy: always

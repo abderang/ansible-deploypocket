@@ -1,8 +1,8 @@
 ---
-- name: Build and run PocketBase Docker container
+- name: Build and run pocketBase docker container
   hosts: all
   tasks:
-    - name: Ensure App Directories Exist
+    - name: Create app directories
       file:
         path: "{{ item }}"
         state: directory
@@ -19,7 +19,7 @@
         path: "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks/main.pb.js"
         state: touch
         
-    - name: Write Dockerfile for PocketBase
+    - name: Write dockerfile for pocketBase
       copy:
         dest: "/deploypocket/pocketbase/Dockerfile"
         content: |
@@ -35,7 +35,7 @@
           # start PocketBase
           CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
           
-    - name: Build PocketBase Docker image
+    - name: Build pocketBase docker image
       docker_image:
         name: "pocketbase-003-{{ pb_version }}"
         source: build
@@ -48,12 +48,14 @@
         force_tag: true
 
 
-    - name: Run PocketBase Docker container
+    - name: Run pocketBase docker container
       docker_container:
         name: "{{ instance_code }}"
         image: "pocketbase-003-{{ pb_version }}:latest"
         state: started
         restart_policy: always
+        cpus: "{{ v_cpu }}"
+        memory: "{{ v_ram }}M"
         networks:
           - name: caddy_network
         volumes:
@@ -61,8 +63,10 @@
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_data:/pb/pb_data"
           - "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks:/pb/pb_hooks"
           - "/deploypocket/apps/{{ instance_code }}/pb/storage:/pb/storage"
+        labels:
+          "sablier.enable": "true"        
 
-    - name: Run Pocketbase Migrations
+    - name: Run pocketbase migrations
       community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
@@ -70,7 +74,7 @@
           - "migrate"
           - "up"
 
-    - name: Create Admin Account
+    - name: Create admin account
       community.docker.docker_container_exec:
         container: "{{ instance_code }}"
         argv:
@@ -79,3 +83,23 @@
           - "create"
           - "{{ admin_email }}"
           - "{{ admin_password }}"
+
+    - name: Add caddy and sablier config
+      ansible.builtin.copy:
+        content: |
+          http://{{ instance_code }}.deploypocket.com {
+            route /* {
+              sablier {
+                names {{ instance_code }}
+                session_duration 1m
+                blocking
+              }
+              reverse_proxy {{ instance_code }}:8090
+            }
+          }
+          
+        dest: /deploypocket/apps/{{ instance_code }}/caddy+sablier.conf
+        mode: '0644'
+
+    - name: Reload caddy configuration
+      include_tasks: "reload_caddy_configuration.yml"

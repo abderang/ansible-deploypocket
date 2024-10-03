@@ -1,5 +1,5 @@
 ---
-- name: Install Dependencoes
+- name: Install dependencies
   hosts: all
   tasks:
     - name: Create deploypocket directory
@@ -17,14 +17,18 @@
         mode: "0755"
       loop:
         - "caddy"
+        - "sablier"
         - "apps"
         - "pocketbase"
 
-    - name: Ensure caddy_network exists
+    - name: Create caddy_network
       docker_network:
         name: caddy_network
         driver: bridge
         state: present
 
-    - name: Install Caddy
+    - name: Install sablier
+      include_tasks: "install_sablier.yml"
+
+    - name: Install caddy
       include_tasks: "install_caddy.yml"
