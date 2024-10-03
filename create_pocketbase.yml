@@ -1,9 +1,8 @@
 ---
 - name: Build and run pocketBase docker container
   hosts: all
-  connection: local
   tasks:
-    - name: Ensure App Directories Exist
+    - name: Create app directories
       file:
         path: "{{ item }}"
         state: directory
@@ -20,7 +19,7 @@
         path: "/deploypocket/apps/{{ instance_code }}/pb/pb_hooks/main.pb.js"
         state: touch
         
-    - name: Write Dockerfile for PocketBase
+    - name: Write dockerfile for pocketBase
       copy:
         dest: "/deploypocket/pocketbase/Dockerfile"
         content: |
@@ -31,7 +30,7 @@
               unzip \
               ca-certificates
           # download and unzip PocketBase
-          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+          ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_arm64.zip /tmp/pb.zip
           RUN unzip /tmp/pb.zip -d /pb/
           # start PocketBase
           CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]

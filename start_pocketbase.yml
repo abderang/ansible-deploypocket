@@ -1,9 +1,8 @@
 ---
 - name: Start pocketbase docker container
   hosts: all
-  connection: local
   tasks:
-    - name: Start PocketBase Docker container
+    - name: Start pocketBase docker container
       docker_container:
         name: "{{ instance_code }}"
         state: started
